@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String?  @unique // Optional for now to avoid breaking existing data, but we will enforce it in app logic
+  password  String
+  firstName String?
+  lastName  String?
+  phone     String?
+  company   String?
+  address   String?
+  city      String?
+  zipCode   String?
+  country   String?
+  role      String   @default("CLIENT") // ADMIN, CLIENT
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+  carts     Cart[]
+  savedProducts SavedProduct[]
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String
+  price         Float
+  onSale        Boolean  @default(false)
+  discountPercentage Int?  // 0-100, percentage off the base price
+  image         String?
+  images        String?  // JSON string of additional images
+  category      String?
+  sizeFormat    String?  // e.g. "A4", "A3"
+  slug          String   @unique @default(cuid())
+  formConfig    String?  // JSON string defining the form fields
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+  savedIn       SavedProduct[]
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  userId          Int
+  user            User        @relation(fields: [userId], references: [id])
+  status          String      @default("PENDING") // PENDING, COMPLETED, CANCELLED
+  total           Float
+  shippingCost    Float       @default(0)
+  taxAmount       Float       @default(0)
+  shippingAddress String?
+  billingAddress  String?
+  paymentId       String?     // Stripe Payment ID
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+  payment         Payment?
+  changeRequests  OrderChangeRequest[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+  customization String? // JSON string of user selections
+}
+
+model SavedProduct {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId]) // Prevent duplicate saves
+}
+
+model Payment {
+  id              Int      @id @default(autoincrement())
+  orderId         Int      @unique
+  order           Order    @relation(fields: [orderId], references: [id])
+  amount          Float
+  currency        String   @default("EUR")
+  stripePaymentId String?
+  status          String   @default("PENDING") // PENDING, SUCCEEDED, FAILED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  userId    Int?       // Nullable for guest carts
+  user      User?      @relation(fields: [userId], references: [id])
+  sessionId String?    // For anonymous users
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  cartId    Int
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  customization String? // JSON string of user selections
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderChangeRequest {
+  id              Int      @id @default(autoincrement())
+  orderId         Int
+  order           Order    @relation(fields: [orderId], references: [id])
+  requestedBy     Int      // User ID who requested change
+  changeType      String   // MODIFY, CANCEL
+  changeDetails   String?  // JSON string with requested changes
+  status          String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  adminNotes      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Settings {
+  id              Int      @id @default(autoincrement())
+  shippingCost    Float    @default(5.00)
+  taxRate         Float    @default(0.20) // 20% VAT
+  currency        String   @default("EUR")
+  updatedAt       DateTime @updatedAt
+}
