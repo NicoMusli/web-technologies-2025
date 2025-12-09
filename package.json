@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "5.10.2",
+    "@react-pdf/renderer": "^4.3.1",
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.5.3",
     "axios": "^1.13.2",

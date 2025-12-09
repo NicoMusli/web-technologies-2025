@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { ajaxRequest } from '../../utils/ajax';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import InvoicePDF from '../../components/InvoicePDF';
 
 const OrderDetails = () => {
     const { id } = useParams();
@@ -227,9 +229,15 @@ const OrderDetails = () => {
                                     )}
                                 </>
                             )}
-                            <button className="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
-                                Download Invoice
-                            </button>
+                            <PDFDownloadLink
+                                document={<InvoicePDF order={order} />}
+                                fileName={`invoice-${order.id}.pdf`}
+                                className="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 text-center"
+                            >
+                                {({ blob, url, loading, error }) =>
+                                    loading ? 'Generating Invoice...' : 'Download Invoice'
+                                }
+                            </PDFDownloadLink>
                         </div>
 
                         {/* Request History */}
