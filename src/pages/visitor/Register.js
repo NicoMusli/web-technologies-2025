@@ -11,7 +11,8 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    agreedToTerms: false
   });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
@@ -41,12 +42,15 @@ const Register = () => {
 
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
 
+    if (!formData.agreedToTerms) newErrors.agreedToTerms = 'You must agree to the terms and conditions';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
     if (errors[e.target.name]) setErrors({ ...errors, [e.target.name]: '' });
   };
 
@@ -211,6 +215,25 @@ const Register = () => {
                     placeholder="••••••••"
                   />
                   {errors.confirmPassword && <p className="mt-1 text-xs text-red-500 font-medium">{errors.confirmPassword}</p>}
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2 mt-4">
+                <div className="flex items-center h-5">
+                  <input
+                    id="agreedToTerms"
+                    name="agreedToTerms"
+                    type="checkbox"
+                    checked={formData.agreedToTerms}
+                    onChange={handleChange}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                </div>
+                <div className="ml-2 text-sm">
+                  <label htmlFor="agreedToTerms" className="font-medium text-gray-700 dark:text-gray-300">
+                    I agree to the <Link to="/terms" className="text-blue-600 hover:underline dark:text-blue-500">Terms and Conditions</Link>
+                  </label>
+                  {errors.agreedToTerms && <p className="mt-1 text-xs text-red-500 font-medium">{errors.agreedToTerms}</p>}
                 </div>
               </div>
 
