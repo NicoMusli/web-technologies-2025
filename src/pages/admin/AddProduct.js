@@ -348,75 +348,77 @@ const AddProduct = () => {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Product Images */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
-              <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-                <h2 className="text-xl font-bold text-gray-900">Product Images</h2>
-                <p className="text-sm text-gray-500 mt-1">Upload up to 5 images</p>
-              </div>
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 space-y-6">
+              {/* Product Images */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                  <h2 className="text-xl font-bold text-gray-900">Product Images</h2>
+                  <p className="text-sm text-gray-500 mt-1">Upload up to 5 images</p>
+                </div>
 
-              <div className="p-6 space-y-4">
-                <label htmlFor="image-upload" className="block w-full border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group">
-                  <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-3 group-hover:bg-blue-100 transition-colors">
-                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
+                <div className="p-6 space-y-4">
+                  <label htmlFor="image-upload" className="block w-full border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group">
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-3 group-hover:bg-blue-100 transition-colors">
+                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900">Upload images</p>
+                      <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
                     </div>
-                    <p className="text-sm font-semibold text-gray-900">Upload images</p>
-                    <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+                  </label>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+
+                  <div className="grid grid-cols-3 gap-3">
+                    {images.map((img, index) => (
+                      <div key={index} className="aspect-square rounded-xl border-2 border-gray-200 bg-gray-50 overflow-hidden relative group">
+                        <img src={URL.createObjectURL(img)} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setImages(images.filter((_, i) => i !== index))}
+                          className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    {images.length < 5 && (
+                      <div className="aspect-square rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300 text-2xl font-light">
+                        +
+                      </div>
+                    )}
                   </div>
-                </label>
-                <input
-                  id="image-upload"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-
-                <div className="grid grid-cols-3 gap-3">
-                  {images.map((img, index) => (
-                    <div key={index} className="aspect-square rounded-xl border-2 border-gray-200 bg-gray-50 overflow-hidden relative group">
-                      <img src={URL.createObjectURL(img)} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => setImages(images.filter((_, i) => i !== index))}
-                        className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
-                  {images.length < 5 && (
-                    <div className="aspect-square rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300 text-2xl font-light">
-                      +
-                    </div>
-                  )}
                 </div>
               </div>
-            </div>
 
-            {/* Actions */}
-            <div className="flex flex-col gap-3">
-              <button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-2"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Save Product
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate('/admin/products')}
-                className="w-full bg-white hover:bg-gray-50 text-gray-700 font-bold py-3 px-6 rounded-xl border border-gray-300 transition-all"
-              >
-                Cancel
-              </button>
+              {/* Actions */}
+              <div className="flex flex-col gap-3">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Save Product
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/admin/products')}
+                  className="w-full bg-white hover:bg-gray-50 text-gray-700 font-bold py-3 px-6 rounded-xl border border-gray-300 transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </form>

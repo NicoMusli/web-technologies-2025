@@ -455,111 +455,113 @@ const EditProduct = () => {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 space-y-6">
 
-            {/* Main Image */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-                <h2 className="text-xl font-bold text-gray-900">Main Image</h2>
-                <p className="text-sm text-gray-500 mt-1">Primary product image</p>
-              </div>
-              <div className="p-6 space-y-4">
-                <label className="block w-full border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group">
-                  <div className="flex flex-col items-center">
-                    <p className="text-sm font-semibold text-gray-900">Change Main Image</p>
+              {/* Main Image */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                  <h2 className="text-xl font-bold text-gray-900">Main Image</h2>
+                  <p className="text-sm text-gray-500 mt-1">Primary product image</p>
+                </div>
+                <div className="p-6 space-y-4">
+                  <label className="block w-full border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group">
+                    <div className="flex flex-col items-center">
+                      <p className="text-sm font-semibold text-gray-900">Change Main Image</p>
+                    </div>
+                    <input type="file" accept="image/*" onChange={handleMainImageUpload} className="hidden" />
+                  </label>
+
+                  <div className="aspect-square rounded-xl border-2 border-gray-200 bg-gray-50 overflow-hidden relative">
+                    {newMainImage ? (
+                      <img src={URL.createObjectURL(newMainImage)} alt="New Main" className="w-full h-full object-cover" />
+                    ) : mainImage ? (
+                      <img src={mainImage} alt="Main" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
+                    )}
                   </div>
-                  <input type="file" accept="image/*" onChange={handleMainImageUpload} className="hidden" />
-                </label>
-
-                <div className="aspect-square rounded-xl border-2 border-gray-200 bg-gray-50 overflow-hidden relative">
-                  {newMainImage ? (
-                    <img src={URL.createObjectURL(newMainImage)} alt="New Main" className="w-full h-full object-cover" />
-                  ) : mainImage ? (
-                    <img src={mainImage} alt="Main" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
-                  )}
                 </div>
               </div>
-            </div>
 
-            {/* Additional Images */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-                <h2 className="text-xl font-bold text-gray-900">Gallery Images</h2>
-                <p className="text-sm text-gray-500 mt-1">Up to 5 additional images</p>
-              </div>
+              {/* Additional Images */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                  <h2 className="text-xl font-bold text-gray-900">Gallery Images</h2>
+                  <p className="text-sm text-gray-500 mt-1">Up to 5 additional images</p>
+                </div>
 
-              <div className="p-6 space-y-4">
-                <label className="block w-full border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group">
-                  <div className="flex flex-col items-center">
-                    <p className="text-sm font-semibold text-gray-900">Add Images</p>
+                <div className="p-6 space-y-4">
+                  <label className="block w-full border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group">
+                    <div className="flex flex-col items-center">
+                      <p className="text-sm font-semibold text-gray-900">Add Images</p>
+                    </div>
+                    <input type="file" accept="image/*" multiple onChange={handleAdditionalImageUpload} className="hidden" />
+                  </label>
+
+                  <div className="grid grid-cols-3 gap-3">
+                    {/* Existing Images */}
+                    {existingImages.map((img, index) => (
+                      <div key={`existing-${index}`} className="aspect-square rounded-xl border-2 border-gray-200 bg-gray-50 overflow-hidden relative group">
+                        <img src={img} alt={`Existing ${index}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeExistingImage(index)}
+                          className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+
+                    {/* New Images */}
+                    {newImages.map((img, index) => (
+                      <div key={`new-${index}`} className="aspect-square rounded-xl border-2 border-blue-200 bg-blue-50 overflow-hidden relative group">
+                        <img src={URL.createObjectURL(img)} alt={`New ${index}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeNewImage(index)}
+                          className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                  <input type="file" accept="image/*" multiple onChange={handleAdditionalImageUpload} className="hidden" />
-                </label>
-
-                <div className="grid grid-cols-3 gap-3">
-                  {/* Existing Images */}
-                  {existingImages.map((img, index) => (
-                    <div key={`existing-${index}`} className="aspect-square rounded-xl border-2 border-gray-200 bg-gray-50 overflow-hidden relative group">
-                      <img src={img} alt={`Existing ${index}`} className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => removeExistingImage(index)}
-                        className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
-
-                  {/* New Images */}
-                  {newImages.map((img, index) => (
-                    <div key={`new-${index}`} className="aspect-square rounded-xl border-2 border-blue-200 bg-blue-50 overflow-hidden relative group">
-                      <img src={URL.createObjectURL(img)} alt={`New ${index}`} className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => removeNewImage(index)}
-                        className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
                 </div>
               </div>
-            </div>
 
-            {/* Actions */}
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="w-full bg-white hover:bg-red-50 text-red-600 font-bold py-3 px-6 rounded-xl border-2 border-red-200 hover:border-red-300 transition-all flex items-center justify-center gap-2"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-                Delete Product
-              </button>
-
-              <div className="flex gap-3">
+              {/* Actions */}
+              <div className="flex flex-col gap-3">
                 <button
                   type="button"
-                  onClick={() => navigate('/admin/products')}
-                  className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-bold py-3 px-6 rounded-xl border border-gray-300 transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-2"
+                  onClick={handleDelete}
+                  className="w-full bg-white hover:bg-red-50 text-red-600 font-bold py-3 px-6 rounded-xl border-2 border-red-200 hover:border-red-300 transition-all flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
-                  Update
+                  Delete Product
                 </button>
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/admin/products')}
+                    className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-bold py-3 px-6 rounded-xl border border-gray-300 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Update
+                  </button>
+                </div>
               </div>
             </div>
           </div>
