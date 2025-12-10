@@ -59,7 +59,8 @@ const About = () => {
               { name: 'Amelie', role: 'Creative Director', icon: '👩‍🎨', color: 'bg-purple-100 text-purple-600', desc: 'Bringing artistic flair and creativity to every project.' },
               { name: 'Reda', role: 'Production Manager', icon: '⚙️', color: 'bg-orange-100 text-orange-600', desc: 'Ensuring flawless execution and operational efficiency.' },
               { name: 'Alberto', role: 'Technical Lead', icon: '💻', color: 'bg-indigo-100 text-indigo-600', desc: 'Mastering the technology behind our premium prints.' },
-              { name: 'Davide', role: 'Customer Success', icon: '🌟', color: 'bg-green-100 text-green-600', desc: 'Dedicated to ensuring your complete satisfaction.' }
+              { name: 'Davide', role: 'Customer Success', icon: '🌟', color: 'bg-green-100 text-green-600', desc: 'Dedicated to ensuring your complete satisfaction.' },
+              { name: 'Mark', role: 'Head of Logistics', icon: '📦', color: 'bg-teal-100 text-teal-600', desc: 'Ensuring your orders arrive safely and on time.' }
             ].map((member, index) => (
               <div key={index} className="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 text-center relative overflow-hidden w-full sm:w-80">
                 <div className={`w-24 h-24 ${member.color} rounded-full flex items-center justify-center text-4xl mx-auto mb-6 transform group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
