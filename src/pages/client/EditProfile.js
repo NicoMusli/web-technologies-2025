@@ -86,7 +86,7 @@ const EditProfile = () => {
       }
     });
 
-    navigate('/client/dashboard', {
+    navigate('/client/customer-area', {
       state: {
         toast: {
           message: 'Profile updated successfully!',
