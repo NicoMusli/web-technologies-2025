@@ -29,7 +29,7 @@ const Register = () => {
     else if (formData.username.length < 3) newErrors.username = 'Min 3 characters';
 
     if (!formData.email) newErrors.email = 'Email is required';
-    else if (!emailRegex.test(formData.email)) newErrors.email = 'Invalid email format';
+    else if (!emailRegex.test(formData.email)) newErrors.email = 'Please enter a valid email address (e.g., name@example.com)';
 
     if (!formData.firstName) newErrors.firstName = 'Required';
     else if (!nameRegex.test(formData.firstName)) newErrors.firstName = 'Invalid characters';
